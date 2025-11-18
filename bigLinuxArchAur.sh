@@ -67,6 +67,9 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     # declara nome do pacote
     pkgname=$p
 
+    echo PWD
+    echo "$(PWD)"
+
     if [ ! -e "biglinuxArchAur.json" ];then
       echo "biglinuxArchAur.json não existe"
       echo "pulando...."
