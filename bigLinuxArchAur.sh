@@ -24,7 +24,7 @@ sendWebHooks() {
 echo -e "Enviando \033[01;31m$pkgname\033[0m para Package Build"
 # echo -e "Base ${cor}${base}${std}"
 echo " AUR ""$pkgname"="$verAurOrg"
-# echo "Repo ""$pkgname"="$verRepoOrg"
+echo "Repo ""$pkgname"="$verRepoOrg"
 # echo "Branch $branch"
 sleep 1
 webhooks
@@ -158,27 +158,70 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   pkgname=$(sed 's/linux-xanmod-lts/linux-xanmod-lts-linux-bin/' <<< $pkgname)
     # fi
 
-    # gitClone
-    git clone https://aur.archlinux.org/${pkgname}.git > /dev/null 2>&1
+    isValidUrl() {
+        local url="$1"
+        local timeout="${2:-5}"
 
-    if [ ! -d "$pkgname" ];then
-      echo "diretorio $pkgname não existe"
-      echo "pulando...."
-      continue
+        # Constrói a URL de teste
+        local testUrl="${url}/info/refs?service=git-upload-pack"
+
+        # Faz a requisição usando curl
+        local response
+        response=$(curl -s \
+            --max-time "$timeout" \
+            -w "%{http_code}" \
+            -H "User-Agent: git/2.0" \
+            -o /tmp/git_repo_test.txt \
+            "$testUrl" 2>/dev/null)
+
+        local statusCode="$?"
+        local httpCode="${response:-000}"
+
+    #     # Verifica o código HTTP
+    #     if [ "$httpCode" -ne 200 ]; then
+    #         echo "Código HTTP inválido: $httpCode"
+    #         return 1
+    #     fi
+    }
+
+    # descobre se é pacote do biglinux ou do aur
+    if isValidUrl "https://github.com/BigLinuxArch/$pkgname" 10; then
+      echo "Pacote do BigLinux"
+      source=biglinux
+    elif isValidUrl "https://aur.archlinux.org/$pkgname" 10; then
+      echo "Pacote do AUR"
+      source=aur
+    else
+      echo "Pacote não encontrado"
     fi
 
-    cd $pkgname
-    if [ -z "$(grep 'pkgver()' PKGBUILD)" ];then
-      source PKGBUILD
-      veraur=$pkgver-$pkgrel
-      verAurOrg=$veraur
-    else
-      chmod 777 -R ../$pkgname
-      sudo -u builduser bash -c 'makepkg -so --noconfirm --skippgpcheck --needed > /dev/null 2>&1'
-      sleep 1
-      source PKGBUILD
-      veraur=$pkgver-$pkgrel
-      verAurOrg=$veraur
+
+    if [ "$source" = "biglinux" ];then
+      veraur=$(pacman -Sl biglinux-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
+
+    elif [ "$source" = "aur" ];then
+      git clone https://aur.archlinux.org/${pkgname}.git > /dev/null 2>&1
+
+
+      if [ ! -d "$pkgname" ];then
+        echo "diretorio $pkgname não existe"
+        echo "pulando...."
+        continue
+      fi
+
+      cd $pkgname
+      if [ -z "$(grep 'pkgver()' PKGBUILD)" ];then
+        source PKGBUILD
+        veraur=$pkgver-$pkgrel
+        verAurOrg=$veraur
+      else
+        chmod 777 -R ../$pkgname
+        sudo -u builduser bash -c 'makepkg -so --noconfirm --skippgpcheck --needed > /dev/null 2>&1'
+        sleep 1
+        source PKGBUILD
+        veraur=$pkgver-$pkgrel
+        verAurOrg=$veraur
+      fi
     fi
 
     # if [ -n "$(grep xanmod <<< $pkgname)" ];then
@@ -237,7 +280,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
         sendWebHooks
       else
         echo -e "Versão do \033[01;31m$pkgname\033[0m é igual !"
-        echo -e "Base ${cor}${base}${std}"
+        # echo -e "Base ${cor}${base}${std}"
         # echo "Branch $branch"
         sleep 1
       fi
