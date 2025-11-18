@@ -211,4 +211,6 @@ jobs:
           printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 
           sudo pacman -Syy
+
+          export tokenBuild=${{ secrets.TOKEN_BUILD }}
           bash bigLinuxArchAur.sh

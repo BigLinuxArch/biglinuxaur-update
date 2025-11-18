@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
 
-# webhooks() {
+webhooks() {
 # curl -s -o /dev/null -w "%{http_code}" --request POST \
-#   --form token=$token_trigger_BigLinuxAur \
+#   --form token=$TOKEN_BUILD \
 #   --form ref=main \
 #   --form "variables[org]=biglinuxaur" \
 #   --form "variables[package_name]=$package" \
 #   --form "variables[git_branch]=$branch" \
 #   https://gitlabx.bigib.org/api/v4/projects/28/trigger/pipeline
-# }
+
+curl -X POST -H "Accept: application/json" -H "Authorization: token $tokenBuild" \
+  --data '{
+    "event_type": "BigLinuxArch/'$pkgname'",
+    "client_payload": {
+      "branch": "'main'",
+      "url": "'https://github.com/BigLinuxArch/$pkgname'"
+      }
+    }' \
+    https://api.github.com/repos/BigLinuxArch/build-package/dispatches
+}
 
 sendWebHooks() {
 echo -e "Enviando \033[01;31m$pkgname\033[0m para Package Build"
 echo -e "Base ${cor}${base}${std}"
 echo " AUR ""$pkgname"="$verAurOrg"
-echo "Repo ""$pkgname"="$verRepoOrg"
-echo "Branch $branch"
-package=$pkgname
+# echo "Repo ""$pkgname"="$verRepoOrg"
+# echo "Branch $branch"
 sleep 1
-# webhooks
+webhooks
 }
 
 std='\e[m'
