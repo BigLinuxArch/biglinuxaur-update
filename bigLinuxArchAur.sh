@@ -67,9 +67,6 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     # declara nome do pacote
     pkgname=$p
 
-    echo PWD1
-    echo "$(pwd)"
-
     if [ ! -e "biglinuxArchAur.json" ];then
       echo "biglinuxArchAur.json não existe"
       echo "pulando...."
@@ -147,9 +144,6 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       continue
     fi
 
-    echo PWD2
-    echo "$(pwd)"
-
     #versão do AUR
     #limpa todos os $
     veraur=
@@ -201,8 +195,6 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       echo "Pacote não encontrado"
     fi
 
-    echo PWD3
-    echo "$(pwd)"
 
     if [ "$source" = "biglinux" ];then
       veraur=$(pacman -Sl biglinux-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
@@ -230,10 +222,9 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
         veraur=$pkgver-$pkgrel
         verAurOrg=$veraur
       fi
+      cd ..
+      rm -r $pkgname
     fi
-
-    echo PWD4
-    echo "$(pwd)"
 
     # if [ -n "$(grep xanmod <<< $pkgname)" ];then
     #   #add 0 no 2º numero da versão
@@ -256,18 +247,13 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       pkgname=$p
     fi
 
-    if [ "$source" = "aur" ];then
-      #apagar diretorio do git
-      cd ..
-      # if [ "$(grep "linux-xanmod" <<< $pkgname)" ];then
-      #   rm -r linux-xanmod*
-      # else
-        rm -r $pkgname
-      # fi
-    fi
-
-    echo PWD5
-    echo "$(pwd)"
+    ## apagar diretorio do git
+    # cd ..
+    # if [ "$(grep "linux-xanmod" <<< $pkgname)" ];then
+    #   rm -r linux-xanmod*
+    # else
+    #   rm -r $pkgname
+    # fi
 
     # echo "..."
     # echo "pkgname=$pkgname"
