@@ -177,11 +177,11 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
         local statusCode="$?"
         local httpCode="${response:-000}"
 
-    #     # Verifica o código HTTP
-    #     if [ "$httpCode" -ne 200 ]; then
-    #         echo "Código HTTP inválido: $httpCode"
-    #         return 1
-    #     fi
+        # Verifica o código HTTP
+        if [ "$httpCode" -ne 200 ]; then
+            # echo "Código HTTP inválido: $httpCode"
+            return 1
+        fi
     }
 
     # descobre se é pacote do biglinux ou do aur
@@ -245,13 +245,15 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       pkgname=$p
     fi
 
-    #apagar diretorio do git
-    cd ..
-    # if [ "$(grep "linux-xanmod" <<< $pkgname)" ];then
-    #   rm -r linux-xanmod*
-    # else
-      rm -r $pkgname
-    # fi
+    if [ "$source" = "aur" ];then
+      #apagar diretorio do git
+      cd ..
+      # if [ "$(grep "linux-xanmod" <<< $pkgname)" ];then
+      #   rm -r linux-xanmod*
+      # else
+        rm -r $pkgname
+      # fi
+    fi
 
     # echo "..."
     # echo "pkgname=$pkgname"
