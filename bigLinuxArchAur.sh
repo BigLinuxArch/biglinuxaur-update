@@ -22,7 +22,7 @@ curl -X POST -H "Accept: application/json" -H "Authorization: token $tokenBuild"
 
 sendWebHooks() {
 echo -e "Enviando \033[01;31m$pkgname\033[0m para Package Build"
-echo -e "Base ${cor}${base}${std}"
+# echo -e "Base ${cor}${base}${std}"
 echo " AUR ""$pkgname"="$verAurOrg"
 # echo "Repo ""$pkgname"="$verRepoOrg"
 # echo "Branch $branch"
