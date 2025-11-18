@@ -185,7 +185,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     }
 
     # descobre se é pacote do biglinux ou do aur
-    if isValidUrl "https://github.com/BigLinuxArch/$pkgname" 10; then
+    if isValidUrl "https://github.com/biglinux/$pkgname" 10; then
       echo "Pacote do BigLinux"
       source=biglinux
     elif isValidUrl "https://aur.archlinux.org/$pkgname" 10; then
