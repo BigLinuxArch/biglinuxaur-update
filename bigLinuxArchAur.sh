@@ -180,7 +180,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   #remove . e -
     #   veraur=${veraur//[.-]}
     # else
-    #   veraur=${veraur//[.-]}
+      veraur=${veraur//[.-]}
     # fi
 
 
@@ -218,8 +218,8 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
         sendWebHooks
       else
         echo -e "Versão do \033[01;31m$pkgname\033[0m é igual !"
-        echo -e "Base ${cor}${base}${std}"
-        echo "Branch $branch"
+        # echo -e "Base ${cor}${base}${std}"
+        # echo "Branch $branch"
         sleep 1
       fi
     else
@@ -229,7 +229,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       else
         echo -e "Versão do \033[01;31m$pkgname\033[0m é igual !"
         echo -e "Base ${cor}${base}${std}"
-        echo "Branch $branch"
+        # echo "Branch $branch"
         sleep 1
       fi
     fi
