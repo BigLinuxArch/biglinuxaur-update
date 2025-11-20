@@ -186,6 +186,10 @@ jobs:
           [biglinux-stable]
           SigLevel = PackageRequired
           Server = https://repo.biglinux.com.br/stable/$arch' | tee -a /etc/pacman.conf
+          echo '
+          [community-stable]
+          SigLevel = PackageRequired
+          Server = https://repo.communitybig.org/stable/$arch' | tee -a /etc/pacman.conf
 
           sed -i '/PACKAGER=/s/#PACKAGER=.*/\PACKAGER="BigLinux Package Build <bigbruno@gmail.com>\"/' /etc/makepkg.conf
 

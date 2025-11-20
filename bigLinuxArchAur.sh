@@ -132,7 +132,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   verrepo=${verrepo//[-.]}
     # else
       verRepoOrg=$verrepo
-      verrepo=${verrepo//[-.]}
+      verrepo=${verrepo//[-._]}
     # fi
 
     # soma +1 ao pkgNum
@@ -191,17 +191,23 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     elif isValidUrl "https://aur.archlinux.org/$pkgname" 10; then
       echo "Pacote do AUR"
       source=aur
+    elif isValidUrl "https://github.com/big-comm/$pkgname" 10; then
+      echo "Pacote do Community"
+      source=community
     else
       echo "Pacote não encontrado"
     fi
 
-
     if [ "$source" = "biglinux" ];then
+      echo "veraur=biglinux"
       veraur=$(pacman -Sl biglinux-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
+    elif [ "$source" = "community" ];then
+      echo "veraur=community"
+      veraur=$(pacman -Sl community-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
 
     elif [ "$source" = "aur" ];then
+      echo "veraur=aur"
       git clone https://aur.archlinux.org/${pkgname}.git > /dev/null 2>&1
-
 
       if [ ! -d "$pkgname" ];then
         echo "diretorio $pkgname não existe"
