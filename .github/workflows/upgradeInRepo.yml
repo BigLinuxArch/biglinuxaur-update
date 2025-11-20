@@ -250,6 +250,8 @@ jobs:
 
       - name: Push to Git
         shell: bash
+        env:
+          urlBigArch: ${{ github.event.client_payload.urlBigArch }}
         run: |
           pkgName=$(basename $urlBigArch)
           cd $pkgName
