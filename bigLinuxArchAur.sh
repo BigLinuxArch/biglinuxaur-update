@@ -240,7 +240,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   #remove . e -
     #   veraur=${veraur//[.-]}
     # else
-      veraur=${veraur//[.-]}
+      veraur=${veraur//[-._]}
     # fi
 
 
