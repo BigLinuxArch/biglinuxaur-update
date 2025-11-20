@@ -1,0 +1,282 @@
+name: Update Repository
+
+on:
+  repository_dispatch:
+    types:
+      - BigLinuxArch/*
+
+  # workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      volumes:
+        - /opt:/lixo/opt
+        - /usr:/lixo/usr
+        - /var:/lixo/var
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          pacman -Syu --noconfirm git
+          # pacman -Syu --noconfirm pacman sudo git github-cli openssh gnupg coreutils rsync wget fakeroot binutils cmake extra-cmake-modules gcc make devtools \
+          # acl \
+          # archlinux-keyring \
+          # autoconf \
+          # automake \
+          # base-devel \
+          # binutils \
+          # bison \
+          # btrfs-progs \
+          # cryptsetup \
+          # db \
+          # debugedit \
+          # diffutils \
+          # docker \
+          # dnssec-anchors \
+          # fakeroot \
+          # flex \
+          # gc \
+          # gcc-libs \
+          # git \
+          # glib2 \
+          # groff \
+          # grub \
+          # guile \
+          # iputils \
+          # jansson \
+          # ldns \
+          # libedit \
+          # libisl \
+          # libmpc \
+          # libnghttp2 \
+          # libnl \
+          # libp11-kit \
+          # libpcap \
+          # libpsl \
+          # libsasl \
+          # libseccomp \
+          # libsecret \
+          # libssh2 \
+          # libsysprof-capture \
+          # libtasn1 \
+          # libtirpc \
+          # libtool \
+          # libunistring \
+          # libverto \
+          # libxcrypt \
+          # libxml2 \
+          # licenses \
+          # linux \
+          # linux-api-headers \
+          # linux-firmware \
+          # linux-firmware-whence \
+          # lz4 \
+          # lzo \
+          # m4 \
+          # make \
+          # mkinitcpio \
+          # mkinitcpio-busybox \
+          # mpfr \
+          # nano \
+          # ncurses \
+          # nettle \
+          # npth \
+          # openssh \
+          # openssl \
+          # p11-kit \
+          # pacman-mirrorlist \
+          # pam \
+          # pambase \
+          # patch \
+          # pciutils \
+          # pcre2 \
+          # perl \
+          # perl-error \
+          # perl-mailtools \
+          # perl-timedate \
+          # pinentry \
+          # pipewire-jack \
+          # pkgconf \
+          # popt \
+          # procps-ng \
+          # psmisc \
+          # readline \
+          # sed \
+          # shadow \
+          # sqlite \
+          # sudo \
+          # systemd \
+          # systemd-libs \
+          # systemd-sysvcompat \
+          # tar \
+          # texinfo \
+          # tpm2-tss \
+          # tzdata \
+          # util-linux \
+          # util-linux-libs \
+          # which \
+          # xz \
+          # zlib \
+          # zram-generator \
+          # zstd
+
+      # - name: Clean System
+      #   shell: bash -O extglob {0}
+      #   run: |
+      #     # Clean System
+      #     df -h
+      #     docker image prune --all --force
+      #     rm -rf \
+      #     /lixo/opt/google \
+      #     /lixo/opt/pipx \
+      #     /lixo/opt/microsoft \
+      #     /lixo/opt/az \
+      #     /lixo/opt/hostedtoolcache \
+      #     /lixo/usr/local/.ghcup \
+      #     /lixo/usr/share/dotnet \
+      #     /lixo/usr/share/swift \
+      #     /lixo/usr/share/dotnet \
+      #     /lixo/usr/share/miniconda \
+      #     /lixo/usr/local/lib/android \
+      #     /lixo/usr/local/lib/node_modules \
+      #     /lixo/usr/lib/snapd \
+      #     /lixo/usr/lib/modules \
+      #     /lixo/usr/lib/python3 \
+      #     /lixo/usr/lib/firefox \
+      #     /lixo/usr/lib/heroku \
+      #     /lixo/usr/lib/mono \
+      #     /lixo/usr/lib/llvm-13 \
+      #     /lixo/usr/lib/llvm-14 \
+      #     /lixo/usr/lib/llvm-15 \
+      #     /lixo/usr/lib/gcc \
+      #     /lixo/usr/lib/google-cloud-sdk \
+      #     /lixo/usr/lib/jvm \
+      #     /lixo/usr/local/doc \
+      #     /lixo/usr/local/sqlpackage \
+      #     /lixo/usr/local/n \
+      #     /lixo/usr/local/aws-sam-cli \
+      #     /lixo/usr/local/aws-cli \
+      #     /lixo/usr/local/julia1.10.3 \
+      #     /lixo/usr/local/share/vcpkg \
+      #     /lixo/usr/local/share/chromium \
+      #     /lixo/usr/local/share/powershell
+      #     df -h
+
+      # - name: Add BigLinux Repo and Key
+      #   shell: bash
+      #   run: |
+      #     #add biglinux archlinux repository
+      #     echo '
+      #     [biglinux-archlinux]
+      #     SigLevel = PackageRequired
+      #     Server = https://repo.biglinux.com.br/archlinux/$arch' | tee -a /etc/pacman.conf
+      #     # echo '
+      #     # [bigiborg-'"${repo_dev}"']
+      #     # SigLevel = PackageRequired
+      #     # Server = https://'"$mirror_unstable"'/$arch' | tee -a /etc/pacman.conf
+      #     # echo '
+      #     # [biglinux-testing]
+      #     # SigLevel = PackageRequired
+      #     # Server = https://'"$repo_mirror"'.biglinux.com.br/testing/$arch' | tee -a /etc/pacman.conf
+      #     # echo '
+      #     # [biglinux-stable]
+      #     # SigLevel = PackageRequired
+      #     # Server = https://repo.biglinux.com.br/stable/$arch' | tee -a /etc/pacman.conf
+      #     # echo '
+      #     # [community-stable]
+      #     # SigLevel = PackageRequired
+      #     # Server = https://repo.communitybig.org/stable/$arch' | tee -a /etc/pacman.conf
+      #
+      #     # sed -i '/PACKAGER=/s/#PACKAGER=.*/\PACKAGER="BigLinux Package Build <bigbruno@gmail.com>\"/' /etc/makepkg.conf
+      #
+      #     #add biglinux Keyring
+      #     git clone --depth 1 https://github.com/biglinux/biglinux-keyring.git
+      #     pushd biglinux-keyring
+      #       install -m0644 biglinux.gpg /usr/share/pacman/keyrings/
+      #       install -m0644 biglinux-trusted /usr/share/pacman/keyrings/
+      #       install -m0644 biglinux-trusted /usr/share/pacman/keyrings/
+      #     popd
+      #     rm -rf biglinux-keyring
+      #
+      #     pacman-key --init
+      #     pacman-key --populate archlinux biglinux
+      #
+      #     pacman -Sy
+
+      - name: echo PayLoads
+        run: |
+          echo "origin: ${{ github.event.client_payload.origin }}"
+          echo "urlBigArch: ${{ github.event.client_payload.urlBigArch }}"
+
+      - name: Update XPTO
+        env:
+          origin: ${{ github.event.client_payload.origin }}
+          urlBigArch: ${{ github.event.client_payload.urlBigArch }}
+        run: |
+          echo "origin: $origin"
+          echo "urlBigArch: $urlBigArch"
+          pkgName=$(basename $urlBigArch)
+
+          git clone https://${{ secrets.TOKEN_RELEASE }}@github.com/BigLinuxArch/$pkgName
+          pushd $pkgName
+          if [ -d "$pkgName" ]; then
+            rm -rf $pkgName
+          fi
+
+          if [ "$origin" = "biglinux" ] || [ "$origin" = "big-comm" ];then
+            git clone https://github.com/$origin/$pkgName
+            cd $pkgName
+            lastStableBranch=$(git branch -r --sort=-committerdate | grep stable | cut -d "/" -f2 | head -n1)
+            git checkout $lastStableBranch
+            if [ -e "extraAur.sh" ];then
+              echo "executando extra commands"
+              bash extraAur.sh
+            fi
+
+          elif [ "$origin" = "aur" ];then
+            git clone https://aur.archlinux.org/${pkgname}
+            cd $pkgName
+            if [ -e "extraAur.sh" ];then
+              echo "executando extra commands"
+              bash extraAur.sh
+            fi
+          fi
+
+      - name: Push to Git
+        shell: bash
+        run: |
+          pkgName=$(basename $urlBigArch)
+          cd $pkgName
+          git config --global user.email "${{ secrets.PUSHER_EMAIL }}"
+          git config --global user.name "${{ secrets.PUSHER_USER }}"
+          git add -A
+          if [ -n "$(git commit -m "update $(date +%Y-%m-%d)" -a | grep "nothing to commit")" ];then exit 0; fi
+          git push
+
+
+
+
+      # - name: Teste, Makepkg and WebHooks
+      #   shell: bash
+      #   run: |
+      #     useradd builduser -m
+      #     passwd -d builduser
+      #     printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+      #
+      #     sudo pacman -Syy
+      #
+      #     export tokenBuild=${{ secrets.TOKEN_BUILD }}
+      #     bash bigLinuxArchAur.sh
+
+      # - name: Trigger Build Workflow
+      #   uses: peter-evans/repository-dispatch@v1
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     event-type: build
+      #     client-payload: '{"bigbranch": "${{ github.event.client_payload.branch }}" }'

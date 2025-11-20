@@ -132,7 +132,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   verrepo=${verrepo//[-.]}
     # else
       verRepoOrg=$verrepo
-      verrepo=${verrepo//[-._]}
+      verrepo=${verrepo//[-._+]}
     # fi
 
     # soma +1 ao pkgNum
@@ -240,7 +240,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   #remove . e -
     #   veraur=${veraur//[.-]}
     # else
-      veraur=${veraur//[-._]}
+      veraur=${veraur//[-._+]}
     # fi
 
 

@@ -1,4 +1,4 @@
-name: BigLinuxArch AUR Update
+name: BigLinuxArch Check Update
 
 on:
   schedule:
