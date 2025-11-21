@@ -16,7 +16,7 @@ curl -X POST -H "Accept: application/json" -H "Authorization: token $tokerReleas
     "event_type": "BigLinuxArch/'$pkgname'",
     "client_payload": {
       "origin": "'$source'",
-      "branch": "'$verAurOrg'"
+      "branch": "'$verAurOrg'",
       "urlBigArch": "'https://github.com/BigLinuxArch/$pkgname'"
       }
     }' \
