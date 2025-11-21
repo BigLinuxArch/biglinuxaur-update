@@ -1,4 +1,4 @@
-name: BigLinuxArch Check Update
+name: Check Update
 
 on:
   schedule:
