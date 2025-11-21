@@ -139,11 +139,11 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     # soma +1 ao pkgNum
     pkgNum=$((pkgNum+1))
 
-    # Enviar caso não encontre no repo ou seja algum dos mesa-tkg
-    if [ -z "$verrepo" ] || [ "$(grep mesa-tkg <<< $pkgname)" ];then
-      sendWebHooks
-      continue
-    fi
+    # # Enviar caso não encontre no repo ou seja algum dos mesa-tkg
+    # if [ -z "$verrepo" ] || [ "$(grep mesa-tkg <<< $pkgname)" ];then
+    #   sendWebHooks
+    #   continue
+    # fi
 
     #versão do AUR
     #limpa todos os $
