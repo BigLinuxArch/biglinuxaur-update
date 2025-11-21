@@ -33,6 +33,7 @@ jobs:
       - name: Update XPTO
         env:
           origin: ${{ github.event.client_payload.origin }}
+          branch: ${{ github.event.client_payload.branch }}
           urlBigArch: ${{ github.event.client_payload.urlBigArch }}
         run: |
           echo "origin: $origin"
@@ -54,8 +55,14 @@ jobs:
               git checkout $lastStableBranch
               pkgbuildFile=$(find -type f -name PKGBUILD)
               sed -i '/source=/s/\.git"/\.git#branch='$lastStableBranch'"/' $pkgbuildFile
-            # elif [ "$origin" = "big-comm" ];then
+            #elif [ "$origin" = "big-comm" ];then
             fi
+            pkgver=$(sed 's/-[^-]*$//' <<< $branch)
+            pkgrel=$(awk -F'-' '{print $NF}' <<< $branch)
+            echo "pkgver=$pkgver"
+            echo "pkgrel=$pkgrel"
+            sed -i "/pkgver=/s/pkgver=.*/pkgver=$pkgver/" $pkgbuildFile
+            sed -i "/pkgrel=/s/pkgrel=.*/pkgrel=$pkgrel/" $pkgbuildFile
 
             if [ -e "extraAur.sh" ];then
               echo "executando extra commands"

@@ -16,6 +16,7 @@ curl -X POST -H "Accept: application/json" -H "Authorization: token $tokerReleas
     "event_type": "BigLinuxArch/'$pkgname'",
     "client_payload": {
       "origin": "'$source'",
+      "branch": "'$verAurOrg'"
       "urlBigArch": "'https://github.com/BigLinuxArch/$pkgname'"
       }
     }' \
@@ -105,8 +106,6 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     # else
     #   repo='biglinux'
     # fi
-    repo='biglinux'
-    branch='archlinux'
 
     # Versão do repositorio BigLinux
     verrepo=
@@ -122,7 +121,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     #   verrepo=$(pacman -Sl $repo-$base | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
     #   cor='\e[34;1m'
     # fi
-    verrepo=$(pacman -Sl $repo-$branch | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
+    verrepo=$(pacman -Sl biglinux-archlinux | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
 
     # if [ -n "$(grep xanmod <<< $pkgname)" ];then
     #   verRepoOrg=$verrepo
