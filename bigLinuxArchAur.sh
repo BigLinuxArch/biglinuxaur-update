@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
 
 webhooks() {
-# curl -s -o /dev/null -w "%{http_code}" --request POST \
-#   --form token=$TOKEN_BUILD \
-#   --form ref=main \
-#   --form "variables[org]=biglinuxaur" \
-#   --form "variables[package_name]=$package" \
-#   --form "variables[git_branch]=$branch" \
-#   https://gitlabx.bigib.org/api/v4/projects/28/trigger/pipeline
+# curl -X POST -H "Accept: application/json" -H "Authorization: token $tokenBuild" \
+#   --data '{
+#     "event_type": "BigLinuxArch/'$pkgname'",
+#     "client_payload": {
+#       "branch": "'main'",
+#       "url": "'https://github.com/BigLinuxArch/$pkgname'"
+#       }
+#     }' \
+#     https://api.github.com/repos/BigLinuxArch/build-package/dispatches
 
-curl -X POST -H "Accept: application/json" -H "Authorization: token $tokenBuild" \
+curl -X POST -H "Accept: application/json" -H "Authorization: token $tokerRelease" \
   --data '{
     "event_type": "BigLinuxArch/'$pkgname'",
     "client_payload": {
-      "branch": "'main'",
-      "url": "'https://github.com/BigLinuxArch/$pkgname'"
+      "origin": "'$source'",
+      "urlBigArch": "'https://github.com/BigLinuxArch/$pkgname'"
       }
     }' \
-    https://api.github.com/repos/BigLinuxArch/build-package/dispatches
+    https://api.github.com/repos/BigLinuxArch/biglinuxaur-update/dispatches
 }
 
 sendWebHooks() {
@@ -185,6 +187,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     }
 
     # descobre se é pacote do biglinux ou do aur
+    source=
     if isValidUrl "https://github.com/biglinux/$pkgname" 10; then
       echo "Pacote do BigLinux"
       source=biglinux
@@ -193,20 +196,20 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       source=aur
     elif isValidUrl "https://github.com/big-comm/$pkgname" 10; then
       echo "Pacote do Community"
-      source=community
+      source=big-comm
     else
       echo "Pacote não encontrado"
     fi
 
     if [ "$source" = "biglinux" ];then
-      echo "veraur=biglinux"
+      # echo "veraur=biglinux"
       veraur=$(pacman -Sl biglinux-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
-    elif [ "$source" = "community" ];then
-      echo "veraur=community"
+    elif [ "$source" = "big-comm" ];then
+      # echo "veraur=big-comm"
       veraur=$(pacman -Sl community-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
 
     elif [ "$source" = "aur" ];then
-      echo "veraur=aur"
+      # echo "veraur=aur"
       git clone https://aur.archlinux.org/${pkgname}.git > /dev/null 2>&1
 
       if [ ! -d "$pkgname" ];then

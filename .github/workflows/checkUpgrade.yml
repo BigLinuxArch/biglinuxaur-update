@@ -217,4 +217,5 @@ jobs:
           sudo pacman -Syy
 
           export tokenBuild=${{ secrets.TOKEN_BUILD }}
+          export tokerRelease=${{ secrets.TOKEN_RELEASE }}
           bash bigLinuxArchAur.sh
