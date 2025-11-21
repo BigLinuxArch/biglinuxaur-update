@@ -29,7 +29,7 @@ echo " AUR ""$pkgname"="$verAurOrg"
 echo "Repo ""$pkgname"="$verRepoOrg"
 # echo "Branch $branch"
 sleep 1
-# webhooks
+webhooks
 }
 
 std='\e[m'
