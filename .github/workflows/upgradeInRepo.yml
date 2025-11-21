@@ -30,7 +30,7 @@ jobs:
           echo "origin: ${{ github.event.client_payload.origin }}"
           echo "branch: ${{ github.event.client_payload.branch }}"
           echo "urlBigArch: ${{ github.event.client_payload.urlBigArch }}"
-          echo "pkgname=$(basename $urlBigArch)" >> $GITHUB_ENV
+          echo "pkgname=$(basename ${{ github.event.client_payload.urlBigArch }})" >> $GITHUB_ENV
 
       - name: Update repo
         env:
