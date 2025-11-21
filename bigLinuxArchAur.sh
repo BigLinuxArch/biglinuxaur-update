@@ -221,17 +221,16 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
       if [ -z "$(grep 'pkgver()' PKGBUILD)" ];then
         source PKGBUILD
         veraur=$pkgver-$pkgrel
-        verAurOrg=$veraur
       else
         chmod 777 -R ../$pkgname
         sudo -u builduser bash -c 'makepkg -so --noconfirm --skippgpcheck --needed > /dev/null 2>&1'
         sleep 1
         source PKGBUILD
+        veraur=$pkgver-$pkgrel
       fi
       cd ..
       rm -r $pkgname
     fi
-    veraur=$pkgver-$pkgrel
     verAurOrg=$veraur
 
     # if [ -n "$(grep xanmod <<< $pkgname)" ];then
