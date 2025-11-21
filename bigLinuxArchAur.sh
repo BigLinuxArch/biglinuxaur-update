@@ -15,7 +15,7 @@ curl -X POST -H "Accept: application/json" -H "Authorization: token $tokerReleas
   --data '{
     "event_type": "BigLinuxArch/'$pkgname'",
     "client_payload": {
-      "origin": "'$source'",
+      "origin": "'$origin'",
       "branch": "'$verAurOrg'",
       "urlBigArch": "'https://github.com/BigLinuxArch/$pkgname'"
       }
@@ -186,28 +186,28 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     }
 
     # descobre se é pacote do biglinux ou do aur
-    source=
+    origin=
     if isValidUrl "https://github.com/biglinux/$pkgname" 10; then
       echo "Pacote do BigLinux"
-      source=biglinux
+      origin=biglinux
     elif isValidUrl "https://aur.archlinux.org/$pkgname" 10; then
       echo "Pacote do AUR"
-      source=aur
+      origin=aur
     elif isValidUrl "https://github.com/big-comm/$pkgname" 10; then
       echo "Pacote do Community"
-      source=big-comm
+      origin=big-comm
     else
       echo "Pacote não encontrado"
     fi
 
-    if [ "$source" = "biglinux" ];then
+    if [ "$origin" = "biglinux" ];then
       # echo "veraur=biglinux"
       veraur=$(pacman -Sl biglinux-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
-    elif [ "$source" = "big-comm" ];then
+    elif [ "$origin" = "big-comm" ];then
       # echo "veraur=big-comm"
       veraur=$(pacman -Sl community-stable | grep " $pkgname " | awk '{print $3}' | cut -d ":" -f2)
 
-    elif [ "$source" = "aur" ];then
+    elif [ "$origin" = "aur" ];then
       # echo "veraur=aur"
       git clone https://aur.archlinux.org/${pkgname}.git > /dev/null 2>&1
 
