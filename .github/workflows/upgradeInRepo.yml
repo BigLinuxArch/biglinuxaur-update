@@ -28,6 +28,7 @@ jobs:
       - name: echo PayLoads
         run: |
           echo "origin: ${{ github.event.client_payload.origin }}"
+          echo "branch: ${{ github.event.client_payload.branch }}"
           echo "urlBigArch: ${{ github.event.client_payload.urlBigArch }}"
 
       - name: Update XPTO
