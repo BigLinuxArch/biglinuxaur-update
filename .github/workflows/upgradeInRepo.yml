@@ -52,7 +52,7 @@ jobs:
             cd $pkgname
 
             if [ "$origin" = "biglinux" ];then
-              lastStableBranch=$(git branch -r --sort=-committerdate | grep stable | cut -d "/" -f2 | head -n1)
+              lastStableBranch=$(git branch -r --sort=-committerdate | grep -v HEAD | grep stable | cut -d "/" -f2 | head -n1)
               git checkout $lastStableBranch
               pkgbuildFile=$(find -type f -name PKGBUILD)
               sed -i '/source=/s/\.git"/\.git#branch='$lastStableBranch'"/' $pkgbuildFile
