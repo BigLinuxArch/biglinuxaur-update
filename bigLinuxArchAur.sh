@@ -48,19 +48,27 @@ arch=x86_64
 
 # # Gerar Json com os dados dos repos
 # biglinuxaur_id=19
-for page in {1..10}; do
-  echo "Fetching page $page..."
-  curl -s "https://api.github.com/users/biglinuxarch/repos?per_page=100&page=$page" | \
-    jq '[.[] | {name: .name, default_branch: .default_branch}]' >> "tmp.json"
-done
+if [ -z "$1" ];then
+  for page in {1..10}; do
+    echo "Fetching page $page..."
+    curl -s "https://api.github.com/users/biglinuxarch/repos?per_page=100&page=$page" | \
+      jq '[.[] | {name: .name, default_branch: .default_branch}]' >> "tmp.json"
+  done
 
-jq -s 'add' "tmp.json" > "biglinuxArchAur.json"
-rm -f tmp.json
+  jq -s 'add' "tmp.json" > "biglinuxArchAur.json"
+  rm -f tmp.json
 
-if [ ! -e "biglinuxArchAur.json" ];then
-  echo "biglinuxArchAur.json não existe"
-  echo "saindo...."
-  exit 1
+  if [ ! -e "biglinuxArchAur.json" ];then
+    echo "biglinuxArchAur.json não existe"
+    echo "saindo...."
+    exit 1
+  fi
+elif [ -n "$1" ];then
+  echo '[
+  {
+    "name": "'$1'"
+  }
+]' > "biglinuxArchAur.json"
 fi
 
 for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do

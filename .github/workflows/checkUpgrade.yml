@@ -4,6 +4,10 @@ on:
   schedule:
     - cron:  '30 2 * * *'
 
+  repository_dispatch:
+    types:
+      - BigLinuxArch-Update/*
+
   workflow_dispatch:
 
 jobs:
@@ -218,4 +222,4 @@ jobs:
 
           export tokenBuild=${{ secrets.TOKEN_BUILD }}
           export tokerRelease=${{ secrets.TOKEN_RELEASE }}
-          bash bigLinuxArchAur.sh
+          bash bigLinuxArchAur.sh ${{ github.event.client_payload.package }}
