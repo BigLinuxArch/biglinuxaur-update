@@ -17,6 +17,7 @@ curl -X POST -H "Accept: application/json" -H "Authorization: token $tokerReleas
     "client_payload": {
       "origin": "'$origin'",
       "branch": "'$verAurOrg'",
+      "user": "'$user'",
       "urlBigArch": "'https://github.com/BigLinuxArch/$pkgname'"
       }
     }' \
@@ -34,6 +35,12 @@ webhooks
 }
 
 std='\e[m'
+
+if [ -n "$2" ];then
+  user=$2
+else
+  user=
+fi
 
 # Limpa disable-list
 sed -i 's/#.*$//' disable-list

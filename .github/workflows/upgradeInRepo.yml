@@ -88,13 +88,17 @@ jobs:
         shell: bash
         env:
           urlBigArch: ${{ github.event.client_payload.urlBigArch }}
+          user: ${{ github.event.client_payload.user }}
         run: |
           # pkgname=$(basename $urlBigArch)
           cd $pkgname
-          # git config --global user.email "${{ secrets.PUSHER_EMAIL }}"
-          # git config --global user.name "${{ secrets.PUSHER_USER }}"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          if [ -n "$user" ];then
+            git config --global user.email "${{ secrets.PUSHER_EMAIL }}"
+            git config --global user.name "${{ secrets.PUSHER_USER }}"
+          else
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+          fi
           git add -A
           if [ -n "$(git commit -m "update $(date +%Y-%m-%d)" -a | grep "nothing to commit")" ];then exit 0; fi
           git push

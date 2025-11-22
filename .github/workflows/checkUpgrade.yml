@@ -222,4 +222,4 @@ jobs:
 
           export tokenBuild=${{ secrets.TOKEN_BUILD }}
           export tokerRelease=${{ secrets.TOKEN_RELEASE }}
-          bash bigLinuxArchAur.sh ${{ github.event.client_payload.package }}
+          bash bigLinuxArchAur.sh ${{ github.event.client_payload.package }} ${{ github.event.client_payload.user }}
