@@ -62,7 +62,7 @@ jobs:
               sed -i '/source=/s/\.git"/\.git#branch='$lastStableBranch'"/' $pkgbuildFile
             #elif [ "$origin" = "big-comm" ];then
             fi
-            branch=$(sed 's/+/-/g' <<< $branch)
+            branch=$(sed 's/+/_/g' <<< $branch)
             pkgver=$(sed 's/-[^-]*$//' <<< $branch)
             pkgrel=$(awk -F'-' '{print $NF}' <<< $branch)
             echo "pkgver=$pkgver"
