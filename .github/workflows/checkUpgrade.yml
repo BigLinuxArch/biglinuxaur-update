@@ -6,7 +6,7 @@ on:
 
   repository_dispatch:
     types:
-      - BigLinuxArch-Update/*
+      - BigLinuxArch-CkeckUpdate/*
 
   workflow_dispatch:
 
