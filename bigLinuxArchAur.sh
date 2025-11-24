@@ -177,8 +177,8 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     isValidUrl() {
         local url="$1"
         local timeout="${2:-5}"
-        # verificar se pacote está forcado origin AUR
 
+        # verificar se pacote está forcado origin AUR
         if [ -n "$(grep github.com/biglinux <<< $url)" ] && [ -n "$(grep $pkgname force-aur)" ];then
             # echo "Force AUR"
             return 1
