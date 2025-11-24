@@ -177,6 +177,10 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
     isValidUrl() {
         local url="$1"
         local timeout="${2:-5}"
+        # verificar se pacote está forcado origin AUR
+        if [ -n "$(grep aur.archlinux.org $url)" ] && [ -n "$(grep $pkgname force-aur)" ];then
+            return 1
+        fi
 
         # Constrói a URL de teste
         local testUrl="${url}/info/refs?service=git-upload-pack"
