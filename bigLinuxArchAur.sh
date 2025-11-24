@@ -181,7 +181,7 @@ for p in $(jq -r 'sort_by(.name)[].name' biglinuxArchAur.json); do
 
         echo "url=$url"
         echo "pkgname=$pkgname"
-        if [ -n "$(grep aur.archlinux.org <<< $url)" ] && [ -n "$(grep $pkgname force-aur)" ];then
+        if [ -n "$(grep github.com/biglinux <<< $url)" ] && [ -n "$(grep $pkgname force-aur)" ];then
             echo "Force AUR"
             return 1
         fi
