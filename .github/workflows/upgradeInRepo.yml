@@ -70,6 +70,8 @@ jobs:
             sed -i "/pkgver=/s/pkgver=.*/pkgver=$pkgver/" $pkgbuildFile
             sed -i "/pkgrel=/s/pkgrel=.*/pkgrel=$pkgrel/" $pkgbuildFile
 
+            ls -lha
+            pwd
             if [ -e "extraAur.sh" ];then
               echo "executando extra commands"
               bash extraAur.sh
