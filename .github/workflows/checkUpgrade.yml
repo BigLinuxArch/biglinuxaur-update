@@ -1,8 +1,8 @@
 name: Check Update
 
 on:
-  schedule:
-    - cron:  '30 2 * * *'
+  # schedule:
+  #   - cron:  '30 2 * * *'
 
   repository_dispatch:
     types:
